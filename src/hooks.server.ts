@@ -2,7 +2,7 @@ import {SvelteKitAuth} from "@auth/sveltekit";
 import Credentials from "@auth/core/providers/credentials";
 import type { Handle } from "@sveltejs/kit";
 import { db } from "$lib/server";
-import { Account } from "$lib/server/schema";
+import { Auth } from "$lib/server/schema";
 import { eq, and } from "drizzle-orm";
 export const handle = SvelteKitAuth({
     providers: [
