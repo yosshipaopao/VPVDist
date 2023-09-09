@@ -183,6 +183,7 @@
 				<details class='collapse collapse-arrow'>
 					<summary class='collapse-title !min-h-0'>User</summary>
 					<ul class='collapse-content'>
+						<li><a href='/user'>user</a></li>
 						<li><a href='/user/search'>Search</a></li>
 					</ul>
 				</details>

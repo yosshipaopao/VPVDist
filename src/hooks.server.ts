@@ -9,7 +9,7 @@ import { createBridge } from "cfw-bindings-wrangler-bridge";
 import { drizzle } from 'drizzle-orm/d1';
 
 const theme = (async ({ event, resolve }) => {
-	const theme = event.cookies.get('theme') ?? 'light';
+	const theme = event.cookies.get('theme') ?? '';
 	return resolve(event, {
 		transformPageChunk: ({ html }) => html.replace('data-theme=\'\'', `data-theme='${theme}'`)
 	});
@@ -18,13 +18,13 @@ const theme = (async ({ event, resolve }) => {
 const Wrangler: Handle = async ({ event, resolve }) => {
 	if (dev) {
 		const bridge = createBridge();
-		event.locals.db = drizzle(event.platform?.DB ?? bridge.D1Database("DB"));
-		event.locals.KV=bridge.KVNamespace("vpvdist_images");
-		event.locals.R2=bridge.R2Bucket("vpvdist")
+		event.locals.db = drizzle(bridge.D1Database("DB"));
+		event.locals.KV=bridge.KVNamespace("KV");
+		event.locals.R2=bridge.R2Bucket("R2")
 	}else {
-		event.locals.db = drizzle(<D1Database>event.platform?.DB);
-		event.locals.KV=<KVNamespace>event.platform?.KV;
-		event.locals.R2=<R2Bucket>event.platform?.R2;
+		event.locals.db = drizzle(<D1Database>event.platform?.env.DB);
+		event.locals.KV=<KVNamespace>event.platform?.env.KV;
+		event.locals.R2=<R2Bucket>event.platform?.env.R2;
 	}
 	return resolve(event);
 };

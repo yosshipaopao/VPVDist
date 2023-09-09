@@ -12,9 +12,11 @@ declare global {
 		}
 		// interface PageData {}
 		interface Platform {
-			DB:D1Database;
-			KV:KVNamespace;
-			R2:R2Bucket;
+			env:{
+				DB:D1Database;
+				KV:KVNamespace;
+				R2:R2Bucket;
+			}
 		}
 	}
 }

@@ -15,8 +15,8 @@
 
 	$:if (iconFiles) {
 		const resizedCanvas = document.createElement('canvas');
-		resizedCanvas.height = 300;
 		resizedCanvas.width = 300;
+		resizedCanvas.height = 300;
 		const image = new Image();
 		const file = iconFiles[0];
 		image.src = URL.createObjectURL(file);
@@ -24,12 +24,19 @@
 		image.onload = async () => {
 			const width = image.width;
 			const height = image.height;
-			const minSize = Math.min(width, height);
-			ctx.drawImage(image, (width - minSize) / 2, (height - minSize) / 2, minSize, minSize, 0, 0, 300, 300);
+			const canvasAspect = resizedCanvas.width / resizedCanvas.height;
+			let sx = 0;
+			let sy = 0;
+			if((width / height) > canvasAspect){
+				sx = (width - height * canvasAspect) / 2;
+			}else {
+				sy = (height - width / canvasAspect) / 2;
+			}
+			ctx.drawImage(image, sx, sy, width - sx * 2, height - sy * 2, 0, 0, resizedCanvas.width, resizedCanvas.height);
 			fetch(resizedCanvas.toDataURL('image/webp')).then(r => r.blob()).then(async (blob) => {
 				const iconFile = new File([blob], 'icon.webp', { type: blob.type });
 				console.log('変換完了！');
-				const id = 'icon-' + crypto.randomUUID().replaceAll('-', '').slice(0, 8);
+				const id = 'icon-' + crypto.randomUUID().replaceAll('-', '');
 				await fetch('/api/image/' + id, {
 					method: 'PUT',
 					body: iconFile

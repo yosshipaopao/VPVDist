@@ -8,7 +8,7 @@ export const GET = (async ({ params, locals }) => {
 	const { value, metadata } = await locals.KV.getWithMetadata(id, { type: 'arrayBuffer' });
 	if (!value) throw error(404, 'Image not found');
 	const headers = new Headers();
-	headers.set('content-type', metadata?.type ?? 'image/png');
+	headers.set('content-type', metadata?.type ?? 'image/webp');
 	headers.set('cache-control', 'public, max-age=31536000, immutable');
 	return new Response(value, { headers });
 }) satisfies RequestHandler;

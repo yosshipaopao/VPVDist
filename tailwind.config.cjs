@@ -7,6 +7,7 @@ const config = {
 	},
 	daisyui: {
 		themes: [
+			'light',
 			{
 				miku: {
 					primary: '#65a44d',
@@ -20,7 +21,7 @@ const config = {
 					error: '#fb7185'
 				}
 			},
-			'light',
+			'night',
 			'dark',
 			'cupcake',
 			'bumblebee',
@@ -46,7 +47,6 @@ const config = {
 			'business',
 			'acid',
 			'lemonade',
-			'night',
 			'coffee',
 			'winter'
 		],
