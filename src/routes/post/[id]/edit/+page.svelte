@@ -4,8 +4,77 @@
 
 	export let data: PageData;
 	export let form: ActionData;
+	let running = false;
 	let thumbnailDirectURL = true;
 	let fileDirectURL = true;
+	let thumbnails: FileList;
+	let thumbnailURL: string=data.post.thumbnail;
+	let mainFiles: FileList;
+	let mainFileURL: string=data.post.file;
+	let beforeFile: File;
+	let beforeThumbnail: File;
+
+	$:if (thumbnails&&thumbnails[0]&&thumbnails[0]!==beforeThumbnail) {
+		beforeThumbnail = thumbnails[0];
+		running = true;
+		const resizedCanvas = document.createElement('canvas');
+		resizedCanvas.width = 1280;
+		resizedCanvas.height = 720;
+		const image = new Image();
+		const file = thumbnails[0];
+		image.src = URL.createObjectURL(file);
+		const ctx = resizedCanvas.getContext('2d') as CanvasRenderingContext2D;
+		image.onload = async () => {
+			const width = image.width;
+			const height = image.height;
+			const canvasAspect = resizedCanvas.width / resizedCanvas.height;
+			let sx = 0;
+			let sy = 0;
+			if ((width / height) > canvasAspect) {
+				sx = (width - height * canvasAspect) / 2;
+			} else {
+				sy = (height - width / canvasAspect) / 2;
+			}
+			ctx.drawImage(image, sx, sy, width - sx * 2, height - sy * 2, 0, 0, resizedCanvas.width, resizedCanvas.height);
+			fetch(resizedCanvas.toDataURL('image/webp')).then(r => r.blob()).then(async (blob) => {
+				const iconFile = new File([blob], 'thumbnail.webp', { type: blob.type });
+				console.log('変換完了！');
+				const id = 'thumbnail-' + crypto.randomUUID().replaceAll('-', '');
+				await fetch('/api/image/' + id, {
+					method: 'PUT',
+					body: iconFile
+				});
+				thumbnailURL = new URL('/api/image/' + id, window.location.href).href;
+				console.log('アップロード完了！');
+				running = false;
+				thumbnailDirectURL = false;
+			});
+		};
+	}
+
+	$:if (mainFiles&&mainFiles[0]&&mainFiles[0]!==beforeFile) {
+		beforeFile = mainFiles[0];
+		running = true;
+		const id = crypto.randomUUID().replaceAll('-', '');
+		console.log('changed');
+		const xhr = new XMLHttpRequest();
+		xhr.addEventListener('readystatechange', (e) => {
+			if (xhr.readyState == 4) {
+				console.log('uploaded');
+				console.log(xhr.status);
+				if(200>xhr.status||xhr.status>=300) {
+					alert('アップロードに失敗しました。');
+					return;
+				}
+				console.log(xhr.responseURL)
+				mainFileURL = new URL('/api/file/' + id, window.location.href).href;
+				running = false;
+				fileDirectURL = false;
+			}
+		});
+		xhr.open('PUT', '/api/file/' + id, true);
+		xhr.send(mainFiles[0]);
+	}
 </script>
 <div class='mx-auto md:px-4 w-full max-w-4xl px-2'>
 	<div class='breadcrumbs'>
@@ -72,34 +141,35 @@
 					<label class='label' for='thumbnail'><span class='label-text text-xl'>Thumbnail</span></label>
 					<label class='label cursor-pointer w-32'>
 						<span class='label-text'>DirectURL</span>
-						<input type='checkbox' class='toggle' bind:checked={thumbnailDirectURL} name='thumbnailDirectURL' />
+						<input type='checkbox' class='toggle' bind:checked={thumbnailDirectURL} />
 					</label>
-					{#if thumbnailDirectURL}
+					{#if !thumbnailDirectURL}
+						<input type='file' class='file-input file-input-bordered w-full max-w-xs' bind:files={thumbnails} />
+						<input id='thumbnail' type='hidden' name='thumbnail'
+									 class='input input-bordered w-full' bind:value={thumbnailURL} required />
+					{:else }
 						<input id='thumbnail' type='url' name='thumbnail' placeholder='Thumbnail'
-									 class='input input-bordered w-full' value={data.post.thumbnail} />
-					{:else}
-						<input type='file' name='thumbnail' required class='file-input file-input-bordered w-full max-w-xs' />
+									 class='input input-bordered w-full' bind:value={thumbnailURL} required />
 					{/if}
+					<img src={thumbnailURL} alt='preview' class='mt-4' />
 				</div>
 				<div class='form-control'>
 					<label class='label' for='file'><span class='label-text text-xl'>File</span></label>
 					<label class='label cursor-pointer w-32'>
 						<span class='label-text'>DirectURL</span>
-						<input type='checkbox' class='toggle' bind:checked={fileDirectURL} name='fileDirectURL' />
+						<input type='checkbox' class='toggle' bind:checked={fileDirectURL} />
 					</label>
-					{#if fileDirectURL}
-						<input id='file' type='text' name='file' placeholder='File' class='input input-bordered w-full' required />
+					{#if !fileDirectURL}
+						<input type='file' class='file-input file-input-bordered w-full max-w-xs' bind:files={mainFiles} />
+						<input id='file' type='hidden' name='file' placeholder='File'
+									 class='input input-bordered w-full' bind:value={mainFileURL} required />
 					{:else}
-						<input type='file' name='file' class='file-input file-input-bordered w-full max-w-xs' required />
+						<input id='file' type='url' name='file' placeholder='File'
+									 class='input input-bordered w-full' bind:value={mainFileURL} required />
 					{/if}
 				</div>
-				<div class='form-control'>
-					<label class='label' for='file'><span class='label-text text-xl'>File</span></label>
-					<input id='file' type='url' name='file' placeholder='File' class='input input-bordered w-full'
-								 value={data.post.file} />
-				</div>
 				<div class='form-control md:col-start-2 mt-10'>
-					<button type='submit' class='btn btn-primary w-full'>編集</button>
+					<button type='submit' class='btn btn-primary w-full'  disabled={running}>編集</button>
 				</div>
 			</form>
 		{:else}

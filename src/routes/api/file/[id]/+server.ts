@@ -21,9 +21,7 @@ export const PUT = (async ({ params, locals, request, url }) => {
 		authorId: files.authorId
 	}).from(files).where(eq(files.url, url.href)).get().then(x => !!x?.authorId);
 	if(alreadyExists) throw error(409, 'File already exists');
-	await locals.R2.put(id,request.body,{
-		httpMetadata:request.headers,
-	});
+	await locals.R2.put(id,request.body,{ httpMetadata:request.headers});
 	await locals.db.insert(files).values({ url: url.href, authorId: session.user.id });
 	return new Response(null, { status: 204 });
 }) satisfies RequestHandler;

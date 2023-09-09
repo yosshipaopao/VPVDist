@@ -16,6 +16,7 @@
 	let beforeThumbnail: File;
 
 	$:if (thumbnails&&thumbnails[0]&&thumbnails[0]!==beforeThumbnail) {
+		beforeThumbnail = thumbnails[0];
 		running = true;
 		const resizedCanvas = document.createElement('canvas');
 		resizedCanvas.width = 1280;
@@ -116,7 +117,7 @@
 				<label class='label' for='thumbnail'><span class='label-text text-xl'>Thumbnail</span></label>
 				<label class='label cursor-pointer w-32'>
 					<span class='label-text'>DirectURL</span>
-					<input type='checkbox' class='toggle' bind:checked={thumbnailDirectURL} name='thumbnailDirectURL' />
+					<input type='checkbox' class='toggle' bind:checked={thumbnailDirectURL} />
 				</label>
 				{#if !thumbnailDirectURL}
 					<input type='file' class='file-input file-input-bordered w-full max-w-xs' bind:files={thumbnails} />
@@ -132,7 +133,7 @@
 				<label class='label' for='file'><span class='label-text text-xl'>File</span></label>
 				<label class='label cursor-pointer w-32'>
 					<span class='label-text'>DirectURL</span>
-					<input type='checkbox' class='toggle' bind:checked={fileDirectURL} name='fileDirectURL' />
+					<input type='checkbox' class='toggle' bind:checked={fileDirectURL} />
 				</label>
 				{#if !fileDirectURL}
 					<input type='file' class='file-input file-input-bordered w-full max-w-xs' bind:files={mainFiles} />

@@ -1,7 +1,6 @@
 import type { Actions } from './$types';
 import { error, fail } from '@sveltejs/kit';
 import { posts, contents } from '$lib/schema';
-import { IMAGE_URL, IMAGE_SECRET, OBJECT_SECRET, OBJECT_URL } from '$env/static/private';
 
 export const actions: Actions = {
 	default: async ({ locals, request }) => {
@@ -12,46 +11,12 @@ export const actions: Actions = {
 
 		const title = formData.title as string;
 		const description = formData.description as string;
-		const file = formData.file;
+		const file = formData.file as string;
 		const version = 1;
 		const authorId = session.user.id;
-		const thumbnailMode = formData.thumbnailDirectURL;
-		let thumbnail = '';
-		if (thumbnailMode) {
-			thumbnail = formData.thumbnail === '' ? '/noImage.jpg' : formData.thumbnail as string;
-		} else {
-			const sendForm = new FormData();
-			const { thumbnail: rawThumbnail } = formData as {
-				thumbnail: File
-			};
-			sendForm.append('file', rawThumbnail ?? new Blob());
-			sendForm.append('secret', IMAGE_SECRET);
-			await fetch(new URL(`${id}_${version}`, IMAGE_URL).href, {
-				method: 'POST',
-				body: sendForm
-			});
-			thumbnail = new URL(`${id}_${version}`, IMAGE_URL).href;
-		}
-		let url: string;
-		const fileDirectURL = formData.fileDirectURL;
-		if (fileDirectURL) {
-			url = file as string;
-		} else {
-			const sendForm = new FormData();
-			const { file: rawFile } = formData as {
-				file: File
-			};
-			sendForm.append('file', rawFile ?? new Blob());
-			await fetch(new URL(`${id}_${version}`, OBJECT_URL).href, {
-				method: 'PUT',
-				headers: {
-					'Autorization': `Bearer ${OBJECT_SECRET}`
-				},
-				body: sendForm
-			});
-			url = new URL(`${id}_${version}`, IMAGE_URL).href;
-		}
+		const thumbnail = formData.thumbnail as string;
 
+		console.log(formData);
 
 		const errors: string[] = [];
 		if (title.length < 1) errors.push('title is required');
@@ -75,7 +40,7 @@ export const actions: Actions = {
 			post: id,
 			version,
 			thumbnail,
-			file: url,
+			file,
 			description
 		});
 		return {
