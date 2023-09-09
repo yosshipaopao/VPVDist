@@ -5,19 +5,20 @@
 	export let data: PageData;
 	export let form: ActionData;
 
+	let iconFiles: FileList;
+
 	let inputs = {
 		uid: form?.uid ?? data.session?.user?.id ?? '',
 		name: form?.name ?? data.session?.user?.name ?? ''
 	};
-	let iconSrc = data.session?.user?.image ?? '/noImage.jpg';
-	let iconFile: File;
+	let iconURL = data.session?.user?.image ?? '/noImage.jpg';
 
-	async function onChangeHandler(e: Event) {
+	$:if (iconFiles) {
 		const resizedCanvas = document.createElement('canvas');
 		resizedCanvas.height = 300;
 		resizedCanvas.width = 300;
 		const image = new Image();
-		const file = (e.target?.files as FileList)[0];
+		const file = iconFiles[0];
 		image.src = URL.createObjectURL(file);
 		const ctx = resizedCanvas.getContext('2d') as CanvasRenderingContext2D;
 		image.onload = async () => {
@@ -25,22 +26,20 @@
 			const height = image.height;
 			const minSize = Math.min(width, height);
 			ctx.drawImage(image, (width - minSize) / 2, (height - minSize) / 2, minSize, minSize, 0, 0, 300, 300);
-			iconSrc = URL.createObjectURL(await fetch(resizedCanvas.toDataURL('image/webp')).then(r => r.blob()).then(blob => {
-				iconFile = new File([blob], 'icon.webp', { type: blob.type });
-				return blob;
-			}));
+			fetch(resizedCanvas.toDataURL('image/webp')).then(r => r.blob()).then(async (blob) => {
+				const iconFile = new File([blob], 'icon.webp', { type: blob.type });
+				console.log('変換完了！');
+				const id = 'icon-' + crypto.randomUUID().replaceAll('-', '').slice(0, 8);
+				await fetch('/api/image/' + id, {
+					method: 'PUT',
+					body: iconFile
+				});
+				iconURL = new URL('/api/image/' + id, window.location.href).href;
+				console.log('アップロード完了！');
+			});
 		};
 	}
 
-	const Submit = (e) => {
-		const icon = document.createElement('input');
-		icon.type = 'file';
-		icon.name = 'icon';
-		const dt = new DataTransfer();
-		dt.items.add(iconFile);
-		icon.files = dt.files;
-		e.target.appendChild(icon);
-	};
 </script>
 
 <div class='mx-auto md:px-4 max-w-2xl'>
@@ -73,8 +72,7 @@
 			<p class='text-center'>You are logged in as {data.session.user.name}</p>
 		</div>
 		<h1 class='text-4xl font-bold text-center my-8'>User Config</h1>
-		<form method='post' class='w-full flex flex-col gap-4' on:submit={Submit}
-					enctype='multipart/form-data'>
+		<form method='post' class='w-full flex flex-col gap-4'>
 			<div class='form-control w-full'>
 				<label class='label' for='uid-input'>
 					<span class='label-text'>UID</span>
@@ -96,10 +94,11 @@
 					<span class='label-text'>Icon</span>
 				</label>
 				<div class='flex gap-4'>
-					<figure><img src={iconSrc} alt='icon' class='w-32 h-32 mx-auto object-cover' /></figure>
-					<input type='file' class='file-input file-input-bordered w-full max-w-xs' on:change={onChangeHandler} />
+					<figure><img src={iconURL} alt='icon' class='w-32 h-32 mx-auto object-cover' /></figure>
+					<input type='file' class='file-input file-input-bordered w-full max-w-xs' bind:files={iconFiles} />
 				</div>
 			</div>
+			<input type='hidden' name='icon' value={iconURL} />
 			<div class='w-full md:col-start-2 flex items-end'>
 				<button type='submit' class='btn btn-primary w-full'>Save</button>
 			</div>

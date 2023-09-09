@@ -6,7 +6,6 @@
 </script>
 
 <div class='mx-auto md:px-4 w-full max-w-4xl'>
-
 	{#if data.user}
 		<div class='breadcrumbs self-start'>
 			<ul>
@@ -16,14 +15,14 @@
 				<li><a href='/user'>
 					<Icon icon='mdi:user' class='inline' />
 					User</a></li>
-				<li class='text-gray-500'>{data.user?.name}</li>
+				<li class='text-gray-500'>{data.user.name}</li>
 			</ul>
 		</div>
 		<div class='w-full flex gap-6 mt-10 items-center'>
 			<div class='w-1/2 h-48 flex items-center justify-center'>
 				<div class='avatar'>
 					<div class='h-48 rounded-full'>
-						<img src={data.user?.image} alt={data.user?.name} />
+						<img src={data.user.image} alt={data.user.name} />
 					</div>
 				</div>
 			</div>
@@ -35,7 +34,7 @@
 		<div class='w-full flex flex-col mt-24'>
 			<div class='flex items-center justify-between'>
 				<h2 class='text-3xl font-bold mb-4'>POSTS</h2>
-				<a href='/user/{data.user?.uid}/post' class='btn btn-sm'>detail</a>
+				<a href='/user/{data.user.id}/post' class='btn btn-sm'>detail</a>
 			</div>
 			<div class='w-full overflow-x-scroll'>
 				<div class='flex h-52'>

@@ -7,26 +7,34 @@
 	export let form: ActionData;
 	let thumbnailDirectURL = true;
 	let fileDirectURL = true;
+	let thumbnails: FileList;
+	let mainFiles: FileList;
 
-	const handleFileUpload=(e:ChangeEventHandler<HTMLInputElement>)=>{
-		const xhr=new XMLHttpRequest();
-		xhr.addEventListener("progress",e=>{
-			console.log(e);
-		})
-		xhr.upload.addEventListener("loadend", (e) => {
+	$:if(thumbnails){
+		console.log("changed");
+	}
+
+	$:if(mainFiles){
+		const id= crypto.randomUUID().replaceAll('-', '');
+		console.log("changed");
+		const xhr = new XMLHttpRequest();
+		xhr.addEventListener('progress', e => {
 			console.log(e);
 		});
-		xhr.addEventListener("readystatechange",(e)=>{
-			if(xhr.readyState==4){
+		xhr.upload.addEventListener('loadend', (e) => {
+			console.log(e);
+		});
+		xhr.addEventListener('readystatechange', (e) => {
+			if (xhr.readyState == 4) {
 				console.log(xhr.response);
 			}
-		})
-		xhr.open('POST','?/upload');
-		const formData=new FormData();
-		formData.append('file',e.target.files[0]);
-		console.log(formData);
+		});
+		xhr.open('POST', '/api/file/'+id);
+		const formData = new FormData();
+		formData.append('file', mainFiles[0]);
+		console.log(mainFiles[0]);
 		xhr.send(formData);
-	}
+	};
 </script>
 <div class='mx-auto md:px-4 w-full max-w-4xl px-2'>
 	<div class='breadcrumbs'>
@@ -54,7 +62,7 @@
 	{/if}
 	{#if data.session}
 		<h1 class='text-4xl font-bold mt-10'>PFを投稿する</h1>
-		<form method='post' class='flex flex-col gap-4' enctype='multipart/form-data' action='?/create'>
+		<form method='post' class='flex flex-col gap-4' enctype='multipart/form-data'>
 			<div class='form-control'>
 				<label class='label' for='title'><span class='label-text text-xl'>Title</span></label>
 				<input id='title' type='text' name='title' placeholder='Title' class='input input-bordered w-full' />
@@ -74,7 +82,7 @@
 					<input id='thumbnail' type='text' name='thumbnail' placeholder='Thumbnail'
 								 class='input input-bordered w-full' />
 				{:else}
-					<input type="file" name='thumbnail' required class="file-input file-input-bordered w-full max-w-xs" />
+					<input type='file' name='thumbnail' required class='file-input file-input-bordered w-full max-w-xs' />
 				{/if}
 			</div>
 			<div class='form-control'>
@@ -86,7 +94,7 @@
 				{#if fileDirectURL}
 					<input id='file' type='text' name='file' placeholder='File' class='input input-bordered w-full' required />
 				{:else}
-					<input type="file" name='file' class="file-input file-input-bordered w-full max-w-xs" required />
+					<input type='file' name='file' class='file-input file-input-bordered w-full max-w-xs' required />
 				{/if}
 			</div>
 			<div class='form-control md:col-start-2 mt-10'>
@@ -94,7 +102,8 @@
 			</div>
 		</form>
 
-		<input type="file" name='file' class="file-input file-input-bordered w-full max-w-xs" required on:change={handleFileUpload} />
+		<input type='file' name='file' class='file-input file-input-bordered w-full max-w-xs' required
+					 bind:files={mainFiles} />
 	{:else }
 		<div class='alert alert-error mt-10'>
 			<Icon icon='ic:sharp-error-outline' class='w-6 h-6'></Icon>

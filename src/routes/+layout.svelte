@@ -44,8 +44,7 @@
 	onMount(() => {
 		if (!document.documentElement.dataset.theme) {
 			const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'light';
-			document.documentElement.dataset.theme = theme;
-			document.cookie = `theme=${theme};path=/;max-age=31536000`;
+			changeTheme(theme)
 		}
 	});
 	const changeTheme = (theme: string) => {

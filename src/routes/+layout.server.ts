@@ -1,9 +1,7 @@
 import type { LayoutServerLoad } from "./$types";
 
-export const load = (async ({ locals,cookies }) => {
-	const theme=cookies.get('theme');
+export const load = (async ({ locals }) => {
 	return {
-		session: await locals.getSession(),
-		theme
+		session: await locals.getSession()
 	};
 }) satisfies LayoutServerLoad;

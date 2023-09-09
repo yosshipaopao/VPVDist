@@ -5,9 +5,9 @@ export const load = (async ({url,locals}) => {
 	const q=url.searchParams.get("q");
 	if(!q) return {result:[],q};
 	const result=await locals.db.select({
-		uid:users.uid,
+		id:users.id,
 		name:users.name,
 		image:users.image,
-	}).from(users).where(or(like(users.name, `%${q}%`),like(users.uid,`%${q}%`))).limit(20);
+	}).from(users).where(or(like(users.name, `%${q}%`),like(users.id,`%${q}%`))).limit(20);
 	return {result,q};
 }) satisfies PageServerLoad;

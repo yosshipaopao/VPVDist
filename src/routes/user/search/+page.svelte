@@ -52,7 +52,7 @@
 			{#each data.result as user}
 				<a
 					class='card shadow-xl hover:shadow-none bg-base-200 hover:bg-base-100/100 hover:border'
-					href='/user/{user.uid}'>
+					href='/user/{user.id}'>
 					<div class='card-body flex flex-row p-2 h-30'>
 						<figure><img src={user.image} alt='icon' class='h-24 w-24 object-cover'/></figure>
 						<div>

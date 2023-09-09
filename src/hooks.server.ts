@@ -9,7 +9,7 @@ import { createBridge } from "cfw-bindings-wrangler-bridge";
 import { drizzle } from 'drizzle-orm/d1';
 
 const theme = (async ({ event, resolve }) => {
-	const theme = event.cookies.get('theme') ?? '';
+	const theme = event.cookies.get('theme') ?? 'light';
 	return resolve(event, {
 		transformPageChunk: ({ html }) => html.replace('data-theme=\'\'', `data-theme='${theme}'`)
 	});
@@ -42,7 +42,7 @@ const auth = SvelteKitAuth(async ({ locals }) => {
 		})],
 		callbacks: {
 			async session({ session, user }) {
-				if (user.uid && session.user) session.user.id = user.uid;
+				if (user.id && session.user) session.user.id = user.id;
 				return session;
 			}
 		},

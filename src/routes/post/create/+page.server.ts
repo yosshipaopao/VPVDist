@@ -4,28 +4,7 @@ import { posts, contents } from '$lib/schema';
 import { IMAGE_URL, IMAGE_SECRET, OBJECT_SECRET, OBJECT_URL } from '$env/static/private';
 
 export const actions: Actions = {
-	upload: async ({ locals, request }) => {
-		const session = await locals.getSession();
-		if (!session?.user) throw error(401, 'Unauthorized');
-		const objectID = crypto.randomUUID().replaceAll('-', '') + crypto.randomUUID().replaceAll('-', '');
-		const formData =await request.formData();
-		const file = formData.get('file');
-		if(!file) throw error(400,'file is required');
-		if(!(file instanceof File)) throw error(400,'file is required');
-		const sendForm = new FormData();
-		sendForm.append('file', file);
-		const res = await fetch(new URL(objectID, OBJECT_URL).href, {
-			method: 'PUT',
-			headers: {
-				'Authorization': `Bearer ${OBJECT_SECRET}`
-			},
-			body: sendForm
-		});
-		console.log(res);
-		if (!res.ok) throw error(500, 'Internal Server Error');
-		return { success: true ,url:new URL(objectID,OBJECT_URL).href};
-	},
-	create: async ({ locals, request }) => {
+	default: async ({ locals, request }) => {
 		const session = await locals.getSession();
 		if (!session?.user) throw error(401, 'Unauthorized');
 		const id = crypto.randomUUID().replaceAll('-', '').slice(0, 26);

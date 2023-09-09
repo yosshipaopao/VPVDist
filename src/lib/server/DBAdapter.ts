@@ -9,7 +9,7 @@ export const DBAdapter=(client:DrizzleD1Database):Adapter =>{
             const id= crypto.randomUUID()
             return client
               .insert(users)
-              .values({ ...data, id, uid: id })
+              .values({ ...data, id })
               .returning()
               .get()
         },
