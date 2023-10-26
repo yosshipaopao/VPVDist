@@ -1,11 +1,12 @@
 import type { Actions } from './$types';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { posts, contents } from '$lib/schema';
 
 export const actions: Actions = {
 	default: async ({ locals, request }) => {
-		const session = await locals.getSession();
+		const session = await locals.auth.validate();
 		if (!session?.user) throw error(401, 'Unauthorized');
+		if (!session.user.emailVerified) throw redirect(302, '/email-verification');
 		const id = crypto.randomUUID().replaceAll('-', '').slice(0, 26);
 		const formData = Object.fromEntries(await request.formData());
 
@@ -13,10 +14,8 @@ export const actions: Actions = {
 		const description = formData.description as string;
 		const file = formData.file as string;
 		const version = 1;
-		const authorId = session.user.id;
+		const authorId = session.user.userId;
 		const thumbnail = formData.thumbnail as string;
-
-		console.log(formData);
 
 		const errors: string[] = [];
 		if (title.length < 1) errors.push('title is required');
@@ -47,6 +46,5 @@ export const actions: Actions = {
 			success: true,
 			id
 		};
-
 	}
 };

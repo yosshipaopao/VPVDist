@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+
 	import type { ActionData } from './$types';
+	import { PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
+	import { Turnstile } from 'svelte-turnstile';
 	import { browser } from '$app/environment';
 	import Icon from '@iconify/svelte';
 
@@ -27,7 +30,7 @@
 		<div class="alert alert-info max-w-sm mx-auto mt-4">
 			<p class="text-center">
 				<Icon icon="ic:outline-check-circle" class="inline-block mr-2" />
-				Succeed
+				Your verification link was resent
 			</p>
 		</div>
 	{/if}
@@ -38,38 +41,14 @@
 	{/if}
 
 	<div class="mx-auto md:px-4 max-w-2xl">
-		<h1 class="text-4xl font-bold text-center my-8">Sign In</h1>
+		<h1 class="text-4xl font-bold text-center my-8">Email verification</h1>
+		<p class="text-xl font-bold text-center my-8">
+			Your email verification link was sent to your inbox.
+		</p>
+		<br />
+		<h2 class="text-4xl font-bold text-center my-8">Resend verification link.</h2>
 		<form method="post" class="w-full flex flex-col gap-4" use:enhance>
-			<div class="form-control w-full">
-				<label class="label" for="userId">
-					<span class="label-text">userId or email</span>
-				</label>
-				<input
-					type="text"
-					id="userId"
-					placeholder="Type here"
-					class="input input-bordered w-full max-w-full"
-					name="userId"
-					required
-				/>
-			</div>
-			<div class="form-control w-full">
-				<label class="label" for="password">
-					<span class="label-text">Password</span>
-				</label>
-				<input
-					type="password"
-					id="password"
-					placeholder="Type here"
-					class="input input-bordered w-full max-w-full"
-					name="password"
-				/>
-			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-			<div class="flex justify-between gap-4">
-				<a href="/signup" class="btn btn-secondary">Create an account</a>
-				<a href="/password-reset" class="btn btn-secondary">Reset Password</a>
-			</div>
+			<button type="submit" class="btn btn-primary">ReSend</button>
 		</form>
 	</div>
 </div>

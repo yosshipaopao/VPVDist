@@ -1,14 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+
 	import type { ActionData } from './$types';
-	import { browser } from '$app/environment';
-	import Icon from '@iconify/svelte';
-
 	export let form: ActionData;
-
-	$: if (browser && form) reset?.();
-
-	let reset: () => void | undefined;
 </script>
 
 <div class="mx-auto md:px-4 max-w-4xl">
@@ -31,7 +25,7 @@
 			</p>
 		</div>
 	{/if}
-	{#if form?.message}
+	{#if form?.error}
 		<div class="alert alert-error max-w-sm mx-auto mt-4">
 			<p class="text-center">{form.message}</p>
 		</div>
@@ -40,19 +34,6 @@
 	<div class="mx-auto md:px-4 max-w-2xl">
 		<h1 class="text-4xl font-bold text-center my-8">Sign In</h1>
 		<form method="post" class="w-full flex flex-col gap-4" use:enhance>
-			<div class="form-control w-full">
-				<label class="label" for="userId">
-					<span class="label-text">userId or email</span>
-				</label>
-				<input
-					type="text"
-					id="userId"
-					placeholder="Type here"
-					class="input input-bordered w-full max-w-full"
-					name="userId"
-					required
-				/>
-			</div>
 			<div class="form-control w-full">
 				<label class="label" for="password">
 					<span class="label-text">Password</span>

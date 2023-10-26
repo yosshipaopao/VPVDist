@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+
 	import type { ActionData } from './$types';
 	import { browser } from '$app/environment';
 	import Icon from '@iconify/svelte';
@@ -20,7 +21,7 @@
 					Home</a
 				>
 			</li>
-			<li class="text-gray-500">Sign In</li>
+			<li class="text-gray-500">SignUp</li>
 		</ul>
 	</div>
 	{#if form?.success}
@@ -38,18 +39,18 @@
 	{/if}
 
 	<div class="mx-auto md:px-4 max-w-2xl">
-		<h1 class="text-4xl font-bold text-center my-8">Sign In</h1>
+		<h1 class="text-4xl font-bold text-center my-8">Sign Up</h1>
 		<form method="post" class="w-full flex flex-col gap-4" use:enhance>
 			<div class="form-control w-full">
-				<label class="label" for="userId">
-					<span class="label-text">userId or email</span>
+				<label class="label" for="email">
+					<span class="label-text">email</span>
 				</label>
 				<input
-					type="text"
-					id="userId"
+					type="email"
+					id="email"
 					placeholder="Type here"
 					class="input input-bordered w-full max-w-full"
-					name="userId"
+					name="email"
 					required
 				/>
 			</div>
@@ -65,10 +66,21 @@
 					name="password"
 				/>
 			</div>
+			<div class="form-control w-full">
+				<label class="label" for="confirm-password">
+					<span class="label-text">Confirm Password</span>
+				</label>
+				<input
+					type="password"
+					id="confirm-password"
+					placeholder="Type here"
+					class="input input-bordered w-full max-w-full"
+					name="confirm-password"
+				/>
+			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
-			<div class="flex justify-between gap-4">
-				<a href="/signup" class="btn btn-secondary">Create an account</a>
-				<a href="/password-reset" class="btn btn-secondary">Reset Password</a>
+			<div class="flex justify-end gap-4">
+				<a href="/signin" class="btn btn-secondary">SignIn</a>
 			</div>
 		</form>
 	</div>
