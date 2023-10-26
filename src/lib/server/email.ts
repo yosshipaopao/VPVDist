@@ -1,7 +1,8 @@
-import { HOST, DKIMPrivateKey, SENDER_EMAIL, DKIM_DOMAIN } from '$env/static/private';
+import { DKIMPrivateKey, SENDER_EMAIL, DKIM_DOMAIN } from '$env/static/private';
+import { PUBLIC_HOST } from '$env/static/public';
 
 export const sendEmailVerificationLink = async (email: string, token: string) => {
-	const url = `${HOST}/email-verification/${token}`;
+	const url = `${PUBLIC_HOST}/email-verification/${token}`;
 	return await sendEmail(
 		email,
 		'Verify your email',
@@ -10,7 +11,7 @@ export const sendEmailVerificationLink = async (email: string, token: string) =>
 };
 
 export const sendPasswordResetLink = async (email: string, token: string) => {
-	const url = `${HOST}/password-reset/${token}`;
+	const url = `${PUBLIC_HOST}/password-reset/${token}`;
 	return await sendEmail(
 		email,
 		'Reset your password',

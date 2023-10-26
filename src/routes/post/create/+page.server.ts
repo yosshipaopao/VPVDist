@@ -1,7 +1,12 @@
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { posts, contents } from '$lib/schema';
-
+export const load:PageServerLoad = async ({ locals }) => {
+	const session = await locals.auth.validate();
+	if (!session?.user) throw error(401, 'Unauthorized');
+	if (!session.user.emailVerified) throw redirect(302, '/email-verification');
+	return {};
+}
 export const actions: Actions = {
 	default: async ({ locals, request }) => {
 		const session = await locals.auth.validate();

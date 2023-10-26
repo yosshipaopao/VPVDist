@@ -23,7 +23,7 @@
 	</figure>
 	<h1 class="text-4xl font-bold mt-4">{data.post.title}</h1>
 	<div class="flex sm:flex-row flex-col items-center justify-between mt-4">
-		{#if data.post.authorId === data.session?.user?.id}
+		{#if data.post.authorId === data.session?.user.userId}
 			<div class="join">
 				<a class="join-item btn btn-primary" href="/post/{data.id}/edit">
 					<Icon icon="ic:baseline-edit" class="inline" />
