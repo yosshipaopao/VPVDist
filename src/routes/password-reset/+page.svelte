@@ -2,8 +2,6 @@
 	import { enhance } from '$app/forms';
 
 	import type { ActionData } from './$types';
-	import { PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
-	import { Turnstile } from 'svelte-turnstile';
 	import { browser } from '$app/environment';
 	import Icon from '@iconify/svelte';
 
