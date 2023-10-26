@@ -146,7 +146,7 @@
 						<li><a href="/setting/user">Setup</a></li>
 						<li><a href="/user/{$page.data.session.user.userId}">My Profile</a></li>
 						<li>
-							<form action="/?signout">
+							<form action="/?/signout" method='post'>
 								<button type="submit">SignOut</button>
 							</form>
 						</li>
