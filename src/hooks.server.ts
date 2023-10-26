@@ -8,7 +8,7 @@ import { initializeLucia } from '$lib/server/lucia';
 const theme = (async ({ event, resolve }) => {
 	const theme = event.cookies.get('theme') ?? '';
 	return resolve(event, {
-		transformPageChunk: ({ html }) => html.replace("data-theme=''", `data-theme='${theme}'`)
+		transformPageChunk: ({ html }) => html.replace(`data-theme=""`, `data-theme='${theme}'`)
 	});
 }) satisfies Handle;
 
