@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		.from(posts)
 		.where(eq(posts.id, params.id))
 		.leftJoin(contents, and(eq(contents.post, posts.id), eq(contents.version, posts.version)))
-		.leftJoin(users, eq(posts.authorId, users.id))
+		.innerJoin(users, eq(posts.authorId, users.id))
 		.get();
 	if (!post) throw error(404, 'Post not found');
 	return {

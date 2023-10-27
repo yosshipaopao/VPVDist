@@ -77,7 +77,7 @@ export const contents = sqliteTable(
 	{
 		post: text('post').references(() => posts.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 		version: integer('version').notNull(),
-		thumbnail: text('thumbnail'),
+		thumbnail: text('thumbnail').notNull().default('/noImage.png'),
 		file: text('file').notNull(),
 		description: text('description').notNull(),
 		updatedAt: integer('updatedAt', { mode: 'timestamp_ms' })

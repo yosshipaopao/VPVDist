@@ -25,6 +25,11 @@ export const actions: Actions = {
 		const image = formData.get('image');
 		if (typeof name !== 'string' || typeof image !== 'string' || typeof userId !== 'string')
 			return fail(400, { message: 'Invalid form data' });
+
+		if (!/^[a-zA-Z0-9_-]+$/.test(userId) || userId.length < 3 || userId.length > 32)
+			return fail(400, { message: 'Invalid userId' });
+		if (name.length < 3 || name.length > 32) return fail(400, { message: 'Invalid username' });
+
 		if (name !== session.user.name || image !== session.user.image) {
 			await locals.lucia.updateUserAttributes(session.user.userId, {
 				name,

@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
 	import type { ActionData, PageData } from './$types';
 	import Base from '$lib/component/Base.svelte';
 	import Form from '$lib/component/Form.svelte';
@@ -26,7 +26,17 @@
 			let sy = 0;
 			if (width / height > canvasAspect) sx = (width - height * canvasAspect) / 2;
 			else sy = (height - width / canvasAspect) / 2;
-			ctx.drawImage(image, sx, sy, width - sx * 2, height - sy * 2, 0, 0, resizedCanvas.width, resizedCanvas.height);
+			ctx.drawImage(
+				image,
+				sx,
+				sy,
+				width - sx * 2,
+				height - sy * 2,
+				0,
+				0,
+				resizedCanvas.width,
+				resizedCanvas.height
+			);
 			fetch(resizedCanvas.toDataURL('image/webp'))
 				.then((r) => r.blob())
 				.then(async (blob) => {
@@ -43,26 +53,27 @@
 		};
 	}
 </script>
-<Base breadcrumbs={["Home","Setting","user"]}>
+
+<Base breadcrumbs={[['Home'], ['Setting'], ['user']]}>
 	<Base mini>
 		<FormAlert bind:form />
-		<Form title='User Setting'>
-			<LabeledInput label='userId' name='userId' value={data.userId} />
-			<LabeledInput label='username' name='username' value={data.name} />
-			<div class='form-control w-full md:col-span-2'>
-				<label class='label' for='name-input'>
-					<span class='label-text'>Icon</span>
+		<Form title="User Setting">
+			<LabeledInput label="userId" name="userId" value={data.userId} />
+			<LabeledInput label="username" name="username" value={data.name} />
+			<div class="form-control w-full md:col-span-2">
+				<label class="label" for="name-input">
+					<span class="label-text">Icon</span>
 				</label>
-				<div class='flex gap-4'>
-					<figure><img src={iconURL} alt='icon' class='w-32 h-32 mx-auto object-cover' /></figure>
+				<div class="flex gap-4">
+					<figure><img src={iconURL} alt="icon" class="w-32 h-32 mx-auto object-cover" /></figure>
 					<input
-						type='file'
-						class='file-input file-input-bordered w-full max-w-xs'
+						type="file"
+						class="file-input file-input-bordered w-full max-w-xs"
 						bind:files={iconFiles}
 					/>
 				</div>
 			</div>
-			<input type='hidden' name='image' value={iconURL} />
+			<input type="hidden" name="image" value={iconURL} />
 		</Form>
 	</Base>
 </Base>

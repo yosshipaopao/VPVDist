@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { posts, contents } from '$lib/schema';
-import { and, asc, desc, eq, like, or, type SQLWrapper, type SQL } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 
 export const load = (async ({ locals }) => {
 	const popular = await locals.db

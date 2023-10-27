@@ -3,7 +3,7 @@ import { posts, contents } from '$lib/schema';
 import { and, asc, desc, eq, like, or, type SQLWrapper, type SQL } from 'drizzle-orm';
 
 export const load = (async ({ url, locals }) => {
-	const q = url.searchParams.get('q')??"";
+	const q = url.searchParams.get('q') ?? '';
 	const orderBy = url.searchParams.get('orderBy') ?? 'created';
 	const order = url.searchParams.get('order') ?? 'desc';
 	let orderByQuery: SQLWrapper | undefined;
@@ -31,7 +31,7 @@ export const load = (async ({ url, locals }) => {
 		default:
 			orderQuery = desc(orderByQuery);
 	}
-	if (q==="") return { result: [], q ,orderBy,order};
+	if (q === '') return { result: [], q, orderBy, order };
 	const result = await locals.db
 		.select({
 			id: posts.id,
@@ -44,5 +44,5 @@ export const load = (async ({ url, locals }) => {
 		.leftJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
 		.orderBy(orderQuery)
 		.limit(20);
-	return { result, q,orderBy,order };
+	return { result, q, orderBy, order };
 }) satisfies PageServerLoad;

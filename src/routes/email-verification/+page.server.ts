@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ locals, request }) => {
+	default: async ({ locals }) => {
 		const session = await locals.auth.validate();
 		if (!session) throw redirect(302, '/login');
 		if (session.user.emailVerified) {

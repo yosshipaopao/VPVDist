@@ -1,13 +1,12 @@
 import type { PageServerLoad, Actions } from './$types';
 import { posts, contents } from '$lib/schema';
 import { and, eq } from 'drizzle-orm';
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, parent, locals }) => {
 	const id = params.id;
 	const { session } = await parent();
-	if (!session || !session.user) throw error(401, 'Unauthorized');
-	const uid = session.user.id;
+	if (!session || !session.user) throw redirect(302, '/signin');
 	const post = await locals.db
 		.select({
 			title: posts.title,
@@ -16,7 +15,7 @@ export const load: PageServerLoad = async ({ params, parent, locals }) => {
 			file: contents.file
 		})
 		.from(posts)
-		.where(and(eq(posts.id, id), eq(posts.authorId, uid)))
+		.where(and(eq(posts.id, id), eq(posts.authorId, session.user.userId)))
 		.leftJoin(contents, and(eq(posts.version, contents.version), eq(posts.id, contents.post)))
 		.get();
 	if (!post) throw error(404, 'Post not found or you are not the author');
@@ -25,8 +24,9 @@ export const load: PageServerLoad = async ({ params, parent, locals }) => {
 
 export const actions: Actions = {
 	delete: async ({ params, locals }) => {
-		const session = await locals.getSession();
-		if (!session?.user) throw error(401, 'Unauthorized');
+		const session = await locals.auth.validate();
+		if (!session) throw error(401, 'Unauthorized');
+		if (!session.user.emailVerified) throw redirect(302, '/email-verification');
 		const post = await locals.db
 			.select({
 				authorId: posts.authorId
@@ -35,7 +35,7 @@ export const actions: Actions = {
 			.where(eq(posts.id, params.id))
 			.get();
 		if (!post) throw error(404, 'Post not found');
-		if (post.authorId != session.user.id) throw error(403, 'Forbidden');
+		if (post.authorId != session.user.userId) throw error(403, 'Forbidden');
 		await locals.db.delete(posts).where(eq(posts.id, params.id)).execute();
 		await locals.db.delete(contents).where(eq(contents.post, params.id)).execute();
 		return {
@@ -44,8 +44,9 @@ export const actions: Actions = {
 		};
 	},
 	edit: async ({ params, locals, request }) => {
-		const session = await locals.getSession();
-		if (!session?.user) throw error(401, 'Unauthorized');
+		const session = await locals.auth.validate();
+		if (!session) throw error(401, 'Unauthorized');
+		if (!session.user.emailVerified) throw redirect(302, '/email-verification');
 		const post = await locals.db
 			.select({
 				authorId: posts.authorId,
@@ -60,7 +61,7 @@ export const actions: Actions = {
 			.leftJoin(contents, and(eq(posts.version, contents.version), eq(posts.id, contents.post)))
 			.get();
 		if (!post) throw error(404, 'Post not found');
-		if (post.authorId != session.user.id) throw error(403, 'Forbidden');
+		if (post.authorId != session.user.userId) throw error(403, 'Forbidden');
 		const formData = Object.fromEntries(await request.formData());
 		const differences: {
 			title?: string;
