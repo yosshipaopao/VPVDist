@@ -1,8 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import PostCard from '$lib/component/PostCard.svelte';
-	import Base from '$lib/component/Base.svelte';
-	import Title from '$lib/component/Title.svelte';
+	import {PostCard,Base,Title} from '$lib/component';
 
 	export let data: PageData;
 </script>

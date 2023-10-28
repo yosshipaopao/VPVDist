@@ -1,11 +1,6 @@
 <script lang="ts">
-	import type { PageData, ActionData } from './$types';
-	import Base from '$lib/component/Base.svelte';
-	import Thumbnail from '$lib/component/Form/Thumbnail.svelte';
-	import LabeledInput from '$lib/component/Form/LabeledInput.svelte';
-	import File from '$lib/component/Form/File.svelte';
-	import FormAlert from '$lib/component/FormAlert.svelte';
-	import Form from '$lib/component/Form.svelte';
+	import type { ActionData } from './$types';
+	import {Base, Thumbnail, LabeledInput, File, FormAlert, Form} from '$lib/component';
 
 	export let form: ActionData;
 	let running = false;

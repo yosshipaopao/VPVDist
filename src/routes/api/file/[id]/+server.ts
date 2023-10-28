@@ -1,3 +1,4 @@
+import {validate} from '$lib/server/lucia';
 import { error, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { files } from '$lib/schema';

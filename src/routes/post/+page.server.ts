@@ -13,7 +13,7 @@ export const load = (async ({ locals }) => {
 				thumbnail: contents.thumbnail
 			})
 			.from(posts)
-			.leftJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
+			.innerJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
 			.orderBy(desc(posts.createdAt))
 			.limit(5)
 	);
@@ -26,7 +26,7 @@ export const load = (async ({ locals }) => {
 				thumbnail: contents.thumbnail
 			})
 			.from(posts)
-			.leftJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
+			.innerJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
 			.orderBy(desc(posts.download))
 			.limit(5)
 	);

@@ -3,9 +3,7 @@
 	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
-	import Base from '$lib/component/Base.svelte';
-	import Form from '$lib/component/Form.svelte';
-	import Select from '$lib/component/Form/Select.svelte';
+	import {Base,Form, Select} from '$lib/component';
 
 	export let data: PageData;
 	let q = data.q;
@@ -50,7 +48,7 @@
 					join
 					bind:value={orderBy}
 					options={[
-						{ value: 'cratedAt', label: 'CreatedAt' },
+						{ value: 'createdAt', label: 'CreatedAt' },
 						{ value: 'updatedAt', label: 'UpdatedAt' },
 						{ value: 'download', label: 'Download' }
 					]}

@@ -1,11 +1,6 @@
 <script lang="ts">
 	import type { PageData, ActionData } from './$types';
-	import Base from '$lib/component/Base.svelte';
-	import FormAlert from '$lib/component/FormAlert.svelte';
-	import Form from '$lib/component/Form.svelte';
-	import LabeledInput from '$lib/component/Form/LabeledInput.svelte';
-	import Thumbnail from '$lib/component/Form/Thumbnail.svelte';
-	import File from '$lib/component/Form/File.svelte';
+	import {Base,FormAlert,Form,LabeledInput,Thumbnail,File} from '$lib/component';
 
 	export let data: PageData;
 	export let form: ActionData;

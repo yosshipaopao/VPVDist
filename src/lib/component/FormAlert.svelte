@@ -4,7 +4,7 @@
 	export let form: {
 		success?: boolean;
 		message?: string;
-	} | null = null;
+	} | null | any= null;
 	export let successMessage = 'Succeed';
 </script>
 

@@ -4,15 +4,15 @@ import { and, asc, desc, eq, like, or, type SQLWrapper, type SQL } from 'drizzle
 
 export const load = (async ({ url, locals }) => {
 	const q = url.searchParams.get('q') ?? '';
-	const orderBy = url.searchParams.get('orderBy') ?? 'created';
+	const orderBy = url.searchParams.get('orderBy') ?? 'createdAt';
 	const order = url.searchParams.get('order') ?? 'desc';
 	let orderByQuery: SQLWrapper | undefined;
 	let orderQuery: SQL<unknown> | undefined;
 	switch (orderBy) {
-		case 'created':
+		case 'createdAt':
 			orderByQuery = posts.createdAt;
 			break;
-		case 'updated':
+		case 'updatedAt':
 			orderByQuery = contents.updatedAt;
 			break;
 		case 'download':

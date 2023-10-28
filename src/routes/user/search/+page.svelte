@@ -3,10 +3,7 @@
 	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
-	import Base from '$lib/component/Base.svelte';
-	import Form from '$lib/component/Form.svelte';
-	import UserCard from '$lib/component/UserCard.svelte';
-
+	import {Base,Form,UserCard} from '$lib/component';
 	export let data: PageData;
 	let q = data.q ?? '';
 	let timeout: any;

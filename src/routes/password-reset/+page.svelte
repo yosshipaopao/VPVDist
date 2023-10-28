@@ -1,9 +1,6 @@
 <script lang="ts">
 	import type { ActionData } from './$types';
-	import Base from '$lib/component/Base.svelte';
-	import FormAlert from '$lib/component/FormAlert.svelte';
-	import Form from '$lib/component/Form.svelte';
-	import LabeledInput from '$lib/component/Form/LabeledInput.svelte';
+	import {Base,FormAlert,Form,LabeledInput} from '$lib/component';
 
 	export let form: ActionData;
 </script>
