@@ -6,9 +6,8 @@ import type { PageServerLoad, Actions } from './$types';
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { token } = params;
 	const validToken = await isValidPasswordResetToken(token, locals.db);
-	if (!validToken) {
-		throw redirect(302, '/password-reset');
-	}
+	if (!validToken) throw redirect(302, '/password-reset');
+
 	return {};
 };
 

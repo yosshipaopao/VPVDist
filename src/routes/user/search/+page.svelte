@@ -3,7 +3,7 @@
 	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
-	import {Base,Form,UserCard} from '$lib/component';
+	import { Base, Form, UserCard } from '$lib/component';
 	export let data: PageData;
 	let q = data.q ?? '';
 	let timeout: any;

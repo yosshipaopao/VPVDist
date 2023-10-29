@@ -1,4 +1,3 @@
-import {validate} from '$lib/server/lucia';
 import { error, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { files } from '$lib/schema';
@@ -15,7 +14,6 @@ export const GET = (async ({ params, locals }) => {
 }) satisfies RequestHandler;
 
 export const PUT = (async ({ params, locals, request, url }) => {
-	const id = params.id;
 	const session = await locals.auth.validate();
 	if (!session?.user) throw error(401, 'Unauthorized');
 	if (!session.user.emailVerified) throw redirect(302, '/email-verification');
@@ -28,7 +26,7 @@ export const PUT = (async ({ params, locals, request, url }) => {
 		.get()
 		.then((x) => !!x?.authorId);
 	if (alreadyExists) throw error(409, 'File already exists');
-	await locals.R2.put(id, request.body, { httpMetadata: request.headers });
+	await locals.R2.put(params.id, request.body, { httpMetadata: request.headers });
 	await locals.db.insert(files).values({ url: url.href, authorId: session.user.userId });
 	return new Response(null, { status: 204 });
 }) satisfies RequestHandler;

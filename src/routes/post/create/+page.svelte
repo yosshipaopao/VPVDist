@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ActionData } from './$types';
-	import {Base, Thumbnail, LabeledInput, File, FormAlert, Form} from '$lib/component';
+	import { Base, Thumbnail, LabeledInput, File, FormAlert, Form } from '$lib/component';
 
 	export let form: ActionData;
 	let running = false;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import Icon from '@iconify/svelte';
-	import {Base, Button, UserCard, Title} from '$lib/component';
+	import { Base, Button, UserCard, Title } from '$lib/component';
 	export let data: PageData;
 </script>
 

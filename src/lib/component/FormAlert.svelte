@@ -1,10 +1,13 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 
-	export let form: {
-		success?: boolean;
-		message?: string;
-	} | null | any= null;
+	export let form:
+		| {
+				success?: boolean;
+				message?: string;
+		  }
+		| null
+		| any = null;
 	export let successMessage = 'Succeed';
 </script>
 

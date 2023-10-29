@@ -50,7 +50,8 @@ const config = {
 			'coffee',
 			'winter'
 		],
-		darkTheme: false
+		darkTheme: false,
+		logs: false
 	},
 
 	plugins: [require('daisyui')]

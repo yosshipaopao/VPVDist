@@ -16,7 +16,6 @@ export const GET = (async ({ params, locals }) => {
 }) satisfies RequestHandler;
 
 export const PUT = (async ({ params, locals, request, url }) => {
-	const id = params.id;
 	const session = await locals.auth.validate();
 	if (!session?.user) throw error(401, 'Unauthorized');
 	if (!session.user.emailVerified) throw redirect(302, '/email-verification');
@@ -31,7 +30,7 @@ export const PUT = (async ({ params, locals, request, url }) => {
 	if (alreadyExists) throw error(409, 'File already exists');
 	const file = await request.arrayBuffer();
 	const type = request.headers.get('content-type') ?? 'image/png';
-	await locals.KV.put(id, file, { metadata: { type } });
+	await locals.KV.put(params.id, file, { metadata: { type } });
 	await locals.db.insert(images).values({ url: url.href, authorId: session.user.userId });
 	return new Response(null, { status: 204 });
 }) satisfies RequestHandler;

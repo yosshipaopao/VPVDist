@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import {Base, Title, PostCard} from '$lib/component';
+	import { Base, Title, PostCard } from '$lib/component';
 
 	export let data: PageData;
 </script>

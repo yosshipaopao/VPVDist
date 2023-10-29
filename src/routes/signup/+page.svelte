@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ActionData } from './$types';
-	import {FormAlert, Form, LabeledInput,Base} from '$lib/component';
+	import { FormAlert, Form, LabeledInput, Base } from '$lib/component';
 	export let form: ActionData;
 </script>
 

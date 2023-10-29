@@ -20,7 +20,7 @@ export const users = sqliteTable('user', {
 	id: text('id').notNull().primaryKey(),
 	name: text('name').notNull(),
 	email: text('email').notNull(),
-	emailVerified: integer('emailVerified', { mode: 'boolean' }).default(false),
+	emailVerified: integer('emailVerified', { mode: 'boolean' }).notNull().default(false),
 	image: text('image').notNull().default('/images/default-icon.png')
 });
 

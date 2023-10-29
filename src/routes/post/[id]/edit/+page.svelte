@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { PageData, ActionData } from './$types';
-	import {Base,FormAlert,Form,LabeledInput,Thumbnail,File} from '$lib/component';
+	import { Base, FormAlert, Form, LabeledInput, Thumbnail, File } from '$lib/component';
 
 	export let data: PageData;
 	export let form: ActionData;
 	let running = false;
 </script>
 
-<Base breadcrumbs={[['Home'], ['Post'], [data.post.title, `/post/${data.id}`], ['Edit']]}>
+<Base breadcrumbs={[['Home'], ['Post'], [data.post.title, `/post/${data.post.id}`], ['Edit']]}>
 	<FormAlert bind:form />
 	<Form title="Edit" action="?/edit" submitText="Save" bind:disabled={running} useEnhance={false}>
 		<div class="w-full flex justify-end">

@@ -11,19 +11,22 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const email = formData.get('email');
 		// basic check
-		if (!isValidEmail(email)) {
+		if (!isValidEmail(email))
 			return fail(400, {
 				message: 'Invalid email'
 			});
-		}
 
 		try {
-			const storedUser = await locals.db.select().from(users).where(eq(users.email, email)).get();
-			if (!storedUser) {
+			const databaseUser = await locals.db.select().from(users).where(eq(users.email, email)).get();
+			if (!databaseUser)
 				return fail(400, {
 					message: 'User does not exist'
 				});
-			}
+			const storedUser = {
+				...databaseUser,
+				emailVerified: Number(databaseUser.emailVerified)
+			};
+
 			const user = locals.lucia.transformDatabaseUser(storedUser);
 			const token = await generatePasswordResetToken(user.userId, locals.db);
 			await sendPasswordResetLink(email, token);

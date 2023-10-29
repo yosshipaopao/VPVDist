@@ -1,16 +1,17 @@
 import type { Actions, PageServerLoad } from './$types';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { posts, contents } from '$lib/schema';
+
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.auth.validate();
-	if (!session?.user) throw error(401, 'Unauthorized');
+	if (!session) throw redirect(302, '/signin');
 	if (!session.user.emailVerified) throw redirect(302, '/email-verification');
 	return {};
 };
 export const actions: Actions = {
 	default: async ({ locals, request }) => {
 		const session = await locals.auth.validate();
-		if (!session?.user) throw error(401, 'Unauthorized');
+		if (!session) throw error(401, 'Unauthorized');
 		if (!session.user.emailVerified) throw redirect(302, '/email-verification');
 		const id = crypto.randomUUID().replaceAll('-', '').slice(0, 26);
 		const formData = Object.fromEntries(await request.formData());
