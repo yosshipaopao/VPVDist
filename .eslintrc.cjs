@@ -28,6 +28,6 @@ module.exports = {
 		}
 	],
 	rules: {
-		'svelte/valid-compile': "off"
+		'svelte/valid-compile': 'off'
 	}
 };

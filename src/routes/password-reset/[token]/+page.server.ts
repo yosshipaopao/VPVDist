@@ -16,12 +16,14 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const password = formData.get('password');
 		const confirmPassword = formData.get('confirm-password');
-		if (typeof password !== 'string' || password.length < 6 || password.length > 255) return fail(400, {
-			message: 'Invalid password'
-		});
-		if (password !== confirmPassword) return fail(400, {
-			message: 'Passwords do not match'
-		});
+		if (typeof password !== 'string' || password.length < 6 || password.length > 255)
+			return fail(400, {
+				message: 'Invalid password'
+			});
+		if (password !== confirmPassword)
+			return fail(400, {
+				message: 'Passwords do not match'
+			});
 		try {
 			const { token } = params;
 			const userId = await validatePasswordResetToken(token, locals.db);

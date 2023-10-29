@@ -17,15 +17,18 @@ export const actions: Actions = {
 		const password = formData.get('password');
 		const confirmPassword = formData.get('confirm-password');
 
-		if (typeof password !== 'string' || password.length < 6 || password.length > 255) return fail(400, {
-			message: 'Invalid password'
-		});
-		if (password !== confirmPassword) return fail(400, {
-			message: 'Passwords do not match'
-		});
-		if (!isValidEmail(email)) return fail(400, {
-			message: 'Invalid email'
-		});
+		if (typeof password !== 'string' || password.length < 6 || password.length > 255)
+			return fail(400, {
+				message: 'Invalid password'
+			});
+		if (password !== confirmPassword)
+			return fail(400, {
+				message: 'Passwords do not match'
+			});
+		if (!isValidEmail(email))
+			return fail(400, {
+				message: 'Invalid email'
+			});
 
 		try {
 			const user = await locals.lucia.createUser({

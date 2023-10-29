@@ -48,9 +48,6 @@ export const actions: Actions = {
 			file,
 			description
 		});
-		return {
-			success: true,
-			id
-		};
+		throw redirect(302, `/post/${id}`);
 	}
 };

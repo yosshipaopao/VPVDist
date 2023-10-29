@@ -17,7 +17,11 @@
 					<Icon icon="ic:baseline-edit" class="inline" />
 					Edit
 				</Button>
-				<Button href="/post/{data.post.id}/download?version={data.post.version}" target="_blank" join>
+				<Button
+					href="/post/{data.post.id}/download?version={data.post.version}"
+					target="_blank"
+					join
+				>
 					<Icon icon="ic:baseline-cloud-download" class="inline" />
 					Download
 				</Button>

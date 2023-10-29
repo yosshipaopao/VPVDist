@@ -30,17 +30,14 @@ export const actions: Actions = {
 		if (!session.user.emailVerified) throw redirect(302, '/email-verification');
 
 		const post = await locals.db
-			.select({ count: sql<number>`COUNT(*)` })
+			.select({ id: posts.id })
 			.from(posts)
 			.where(and(eq(posts.id, params.id), eq(posts.authorId, session.user.userId)))
 			.get();
 		if (!post) throw error(404, 'Post not found or you are not the author');
 		await locals.db.delete(posts).where(eq(posts.id, params.id)).execute();
 		await locals.db.delete(contents).where(eq(contents.post, params.id)).execute();
-		return {
-			success: true,
-			delete: true
-		};
+		throw error(404, 'Post deleted');
 	},
 	edit: async ({ params, locals, request }) => {
 		const session = await locals.auth.validate();
@@ -96,13 +93,11 @@ export const actions: Actions = {
 				.where(eq(posts.id, id))
 				.execute();
 			return {
-				success: true,
-				id
+				success: true
 			};
 		}
 		return {
-			success: true,
-			id
+			success: true
 		};
 	}
 };

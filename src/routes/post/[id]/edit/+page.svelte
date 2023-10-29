@@ -10,6 +10,11 @@
 <Base breadcrumbs={[['Home'], ['Post'], [data.post.title, `/post/${data.post.id}`], ['Edit']]}>
 	<FormAlert bind:form />
 	<Form title="Edit" action="?/edit" submitText="Save" bind:disabled={running} useEnhance={false}>
+		<noscript>
+			<div class="alert alert-error max-w-sm mx-auto mt-4">
+				<p class="text-center">Please enable JavaScript to use this page.</p>
+			</div>
+		</noscript>
 		<div class="w-full flex justify-end">
 			<label for="delete" class="btn">削除</label>
 		</div>
