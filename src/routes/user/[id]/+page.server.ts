@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		.from(posts)
 		.where(eq(posts.authorId, id))
 		.orderBy(desc(posts.createdAt))
-		.leftJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
+		.innerJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
 		.limit(5);
 	return {
 		id,

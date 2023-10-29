@@ -13,17 +13,17 @@
 	<div class="flex sm:flex-row flex-col items-center justify-between mt-4">
 		{#if data.post.authorId === data.session?.user.userId}
 			<div class="join">
-				<Button href="/post/{data.id}/edit" join>
+				<Button href="/post/{data.post.id}/edit" join>
 					<Icon icon="ic:baseline-edit" class="inline" />
 					Edit
 				</Button>
-				<Button href="/post/{data.id}/download?version={data.post.version}" target="_blank" join>
+				<Button href="/post/{data.post.id}/download?version={data.post.version}" target="_blank" join>
 					<Icon icon="ic:baseline-cloud-download" class="inline" />
 					Download
 				</Button>
 			</div>
 		{:else}
-			<Button href="/post/{data.id}/download?version={data.post.version}" target="_blank">
+			<Button href="/post/{data.post.id}/download?version={data.post.version}" target="_blank">
 				<Icon icon="ic:baseline-cloud-download" class="inline" />
 				Download
 			</Button>

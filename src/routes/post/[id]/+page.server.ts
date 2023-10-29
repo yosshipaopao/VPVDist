@@ -6,6 +6,7 @@ import { error } from '@sveltejs/kit';
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const post = await locals.db
 		.select({
+			id: posts.id,
 			title: posts.title,
 			description: contents.description,
 			thumbnail: contents.thumbnail,
@@ -20,12 +21,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		})
 		.from(posts)
 		.where(eq(posts.id, params.id))
-		.leftJoin(contents, and(eq(contents.post, posts.id), eq(contents.version, posts.version)))
+		.innerJoin(contents, and(eq(contents.post, posts.id), eq(contents.version, posts.version)))
 		.innerJoin(users, eq(posts.authorId, users.id))
 		.get();
 	if (!post) throw error(404, 'Post not found');
 	return {
-		post,
-		id: params.id
+		post
 	};
 };

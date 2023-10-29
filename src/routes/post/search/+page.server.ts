@@ -41,7 +41,7 @@ export const load = (async ({ url, locals }) => {
 		})
 		.from(posts)
 		.where(or(like(posts.title, `%${q}%`), like(posts.id, `%${q}%`)))
-		.leftJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
+		.innerJoin(contents, and(eq(posts.id, contents.post), eq(posts.version, contents.version)))
 		.orderBy(orderQuery)
 		.limit(20);
 	return { result, q, orderBy, order };

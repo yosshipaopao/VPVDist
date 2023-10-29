@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		})
 		.from(posts)
 		.where(and(eq(posts.id, params.id), eq(posts.authorId, session.user.userId)))
-		.leftJoin(contents, and(eq(posts.version, contents.version), eq(posts.id, contents.post)))
+		.innerJoin(contents, and(eq(posts.version, contents.version), eq(posts.id, contents.post)))
 		.get();
 	if (!post) throw error(404, 'Post not found or you are not the author');
 	return { post };

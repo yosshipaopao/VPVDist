@@ -6,6 +6,7 @@ import { generateEmailVerificationToken } from '$lib/server/token';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const session = await locals.auth.validate();
+	if (session && !session.user.emailVerified) throw redirect(302, '/email-verification');
 	if (session) throw redirect(302, '/');
 };
 
@@ -15,18 +16,16 @@ export const actions: Actions = {
 		const email = formData.get('email');
 		const password = formData.get('password');
 		const confirmPassword = formData.get('confirm-password');
-		// basic check
-		if (typeof password !== 'string' || password.length < 6 || password.length > 255) {
-			return fail(400, {
-				message: 'Invalid password'
-			});
-		}
-		if (password !== confirmPassword) return fail(400, { message: 'Passwords do not match' });
-		if (!isValidEmail(email)) {
-			return fail(400, {
-				message: 'Invalid email'
-			});
-		}
+
+		if (typeof password !== 'string' || password.length < 6 || password.length > 255) return fail(400, {
+			message: 'Invalid password'
+		});
+		if (password !== confirmPassword) return fail(400, {
+			message: 'Passwords do not match'
+		});
+		if (!isValidEmail(email)) return fail(400, {
+			message: 'Invalid email'
+		});
 
 		try {
 			const user = await locals.lucia.createUser({
