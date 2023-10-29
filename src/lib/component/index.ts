@@ -1,6 +1,6 @@
 export { default as Button } from './Button.svelte';
 export { default as Base } from './Base.svelte';
-export { default as BreadCrumbs } from './BreadCrumbs.svelte';
+export { default as BreadCrumbs } from './Breadcrumbs.svelte';
 export { default as Form } from './Form.svelte';
 export { default as FormAlert } from './FormAlert.svelte';
 export { default as PostCard } from './PostCard.svelte';
